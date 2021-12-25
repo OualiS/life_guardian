@@ -16,8 +16,10 @@ require("dotenv").config();
 const chalk = require('chalk');
 //---------
 
-const userRoutes = require('./api/routes/userRoutes');
-const authRoutes = require('./api/routes/authRoutes');
+// const userRoutes = require('./api/routes/userRoutes');
+// const authRoutes = require('./api/routes/authRoutes');
+const dayRoutes = require('./api/routes/dayRoutes');
+
 
 // MongoDB atlas connection
 
@@ -46,9 +48,9 @@ app.use(cors({
 }));
 
 // routes
-app.use('/api/users', userRoutes);
-app.use('/api/auth', authRoutes);
-
+// app.use('/api/users', userRoutes);
+// app.use('/api/auth', authRoutes);
+app.use('/api/day', dayRoutes);
 
 // Handling errors
 

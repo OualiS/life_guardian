@@ -38,7 +38,7 @@
     <!-- Carousel FIN -->
 
     <!-- Form for new day -->
-    <div id="formNewDay">
+    <div id="formNewDay" v-if="currentTime">
       <v-row align="center" justify="center">
         <v-col>
          Nous sommes le <b>{{todayDate}}</b> et il est <b>{{timeNow}}</b>
@@ -46,11 +46,13 @@
       </v-row>
     </div>
     <!-- Form for new day FIN -->
+
+
   </v-container>
 </template>
 
 <script>
-import TextToSpeech from 'text-to-speech-js'
+// import TextToSpeech from 'text-to-speech-js'
 export default {
   name: "HelloWorld",
 
@@ -60,6 +62,7 @@ export default {
     todayDate: null,
     timeNow : null,
     messageTime : null,
+    currentTime : false,
     colors: [
       "indigo",
       "warning",
@@ -75,12 +78,16 @@ export default {
       "https://medias.toutelanutrition.com/blog/2020/07/muscu-banner.jpg",
     ],
   }),
-
+  created () {
+    
+  },
   methods: {
     newDay() {
-      TextToSpeech.talk("Hello Beautiful World!");
+      // TextToSpeech.talk("Hello Beautiful World!");
+      this.$store.dispatch('day/newDay')
       this.showCarrousel = false;
       this.askForNewDay = false;
+      this.currentTime = true;
       const event = new Date(Date());
       const options = {
         weekday: "long",
