@@ -1,62 +1,108 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa" target="_blank" rel="noopener">pwa</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-vuex" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest" target="_blank" rel="noopener">unit-jest</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+  <v-container>
+    <!-- Ask for new day -->
+    <div v-if="askForNewDay">
+      <v-row align="center" justify="center">
+        <v-col cols="12" sm="5">
+          Bienvenue Salah ! Prêt à commencer une nouvelle journée ?
+        </v-col>
+      </v-row>
+      <v-row align="center" justify="center">
+        <v-col cols="12" sm="2">
+          <v-btn color="green" @click="newDay">C'est partit</v-btn>
+        </v-col>
+      </v-row>
+    </div>
+    <!-- Ask for new day FIN -->
+
+    <!-- Carousel  -->
+    <v-row v-if="showCarrousel">
+      <v-col>
+        <v-carousel
+          cycle
+          height="600"
+          hide-delimiter-background
+          show-arrows-on-hover
+        >
+          <v-carousel-item v-for="(slide, i) in slides" :key="i">
+            <v-sheet :color="colors[i]" height="100%">
+              <v-row class="fill-height" align="center" justify="center">
+                <!-- <div class="text-h2">{{ slide }} Slide</div> -->
+                <v-img :src="slide"></v-img>
+              </v-row>
+            </v-sheet>
+          </v-carousel-item>
+        </v-carousel>
+      </v-col>
+    </v-row>
+    <!-- Carousel FIN -->
+
+    <!-- Form for new day -->
+    <div id="formNewDay">
+      <v-row align="center" justify="center">
+        <v-col>
+         Nous sommes le <b>{{todayDate}}</b> et il est <b>{{timeNow}}</b>
+        </v-col>
+      </v-row>
+    </div>
+    <!-- Form for new day FIN -->
+  </v-container>
 </template>
 
 <script>
+import TextToSpeech from 'text-to-speech-js'
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
-</script>
+  name: "HelloWorld",
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
+  data: () => ({
+    showCarrousel: true,
+    askForNewDay: true,
+    todayDate: null,
+    timeNow : null,
+    messageTime : null,
+    colors: [
+      "indigo",
+      "warning",
+      "pink darken-2",
+      "red lighten-1",
+      "deep-purple accent-4",
+    ],
+    slides: [
+      "https://www.mega-gear.net/modules/psblog/uploads/repos%20muscu.png",
+      "https://www.masculin.com/wp-content/uploads/sites/2/2017/04/resultats-musculation.jpg.webp",
+      "https://reussirsonbpjeps.com/wp-content/uploads/2016/09/entretien.jpg",
+      "https://cache.cosmopolitan.fr/data/photo/w1000_ci/1bj/musculation-poids.jpg",
+      "https://medias.toutelanutrition.com/blog/2020/07/muscu-banner.jpg",
+    ],
+  }),
+
+  methods: {
+    newDay() {
+      TextToSpeech.talk("Hello Beautiful World!");
+      this.showCarrousel = false;
+      this.askForNewDay = false;
+      const event = new Date(Date());
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+
+      this.todayDate = event.toLocaleDateString("fr-FR", options);
+      let hours = event.getHours()
+      let minutes = event.getMinutes()
+      this.timeNow  = `${hours}h${minutes}`
+      if (hours < 8) {
+        this.messageTime = "L'avenir appartient à ceux qui se lévent tôt !"
+      }
+      else if(hours < 10){
+        this.messageTime = "Il est bon de rester au lit plus tard de temps en temps."
+      }
+      else if (hours < 12){
+        return
+      }
+    },
+  },
+};
+</script>
